@@ -5,7 +5,7 @@ from .models import Job
 
 from sqlmodel import select
 
-from auth.utils import authenticate, authenticate_driver, authenticate_customer
+from auth.utils import authenticate, authenticate_customer
 
 from .schemas.request import CreateJobRequest
 from . import services

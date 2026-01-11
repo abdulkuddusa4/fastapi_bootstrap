@@ -45,6 +45,14 @@ def authenticate(creds: HTTPAuthorizationCredentials = Depends(security)):
             )
 
 
+def authenticate_customer(claim = Depends(authenticate)):
+    if claim.get('user_type') != 'CUSTOMER':
+        raise HTTPException(
+            detail={"error": "customer account required"},
+            status_code=status.HTTP_401_UNAUTHORIZED
+        )
+    return claim
+
 def authenticate_ROLE_A(claim = Depends(authenticate)):
     if claim.get('user_type') != 'ROLE_A':
         raise HTTPException(

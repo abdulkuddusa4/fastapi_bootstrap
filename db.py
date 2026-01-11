@@ -24,7 +24,6 @@ def load_models():
                     __import__(f"{item.name}.{inner_item.name}")
 
 def map_column_type(column_type):
-    """Map SQLAlchemy types to SQLite types for ALTER TABLE."""
     if isinstance(column_type, Integer):
         return "INTEGER"
     elif isinstance(column_type, Float):
