@@ -37,7 +37,6 @@ def authenticate(creds: HTTPAuthorizationCredentials = Depends(security)):
             return payload  # type: ignore[return-value]
 
         except PyJWTError as e:
-            raise e
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid or expired token",

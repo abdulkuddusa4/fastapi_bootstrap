@@ -34,5 +34,10 @@ booking_app = FastAPI(
     lifespan=lifespan
 )
 
+@booking_app.get('/say_hello_to-{name}')
+def fnc(name):
+    return {
+        "message": f"Helo {name}"
+    }
 
 booking_app.include_router(customer_router, prefix="/customer")
