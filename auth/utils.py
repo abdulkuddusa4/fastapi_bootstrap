@@ -43,7 +43,6 @@ def authenticate(creds: HTTPAuthorizationCredentials = Depends(security)):
                 headers={"WWW-Authenticate": "Bearer"},
             )
 
-
 def authenticate_customer(claim = Depends(authenticate)):
     if claim.get('user_type') != 'CUSTOMER':
         raise HTTPException(
