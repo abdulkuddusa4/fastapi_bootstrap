@@ -1,7 +1,7 @@
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from datetime import datetime, timezone
-from typing import TypedDict
+from typing import TypedDict, Annotated
 
 from fastapi import Depends, HTTPException, status
 import jwt, os
@@ -14,7 +14,7 @@ load_dotenv()
 security = HTTPBearer()
 SECRET_KEY = os.environ['SECRET_KEY']
 
-def authenticate(creds: HTTPAuthorizationCredentials = Depends(security)):
+def authenticate(creds: Annotated[HTTPAuthorizationCredentials, Depends(security)]):
 
         token = creds.credentials
 
@@ -43,7 +43,7 @@ def authenticate(creds: HTTPAuthorizationCredentials = Depends(security)):
                 headers={"WWW-Authenticate": "Bearer"},
             )
 
-def authenticate_customer(claim = Depends(authenticate)):
+def authenticate_customer(claim: Annotated[dict, Depends(authenticate)]):
     if claim.get('user_type') != 'CUSTOMER':
         raise HTTPException(
             detail={"error": "customer account required"},
@@ -51,7 +51,7 @@ def authenticate_customer(claim = Depends(authenticate)):
         )
     return claim
 
-def authenticate_ROLE_A(claim = Depends(authenticate)):
+def authenticate_ROLE_A(claim: Annotated[dict, Depends(authenticate)]):
     if claim.get('user_type') != 'ROLE_A':
         raise HTTPException(
             detail={"error": "customer account required"},
@@ -69,7 +69,7 @@ def authenticate_ROLE_B(claim = Depends(authenticate)):
     return claim
 
 
-def authenticate_ROLE_X_DEPENDS_B(claim = Depends(authenticate_ROLE_B)):
+def authenticate_ROLE_X_DEPENDS_B(claim: Annotated[dict,Depends(authenticate_ROLE_B)]):
     if claim.get('user_type') != 'HELPER':
         raise HTTPException(
             {"error": "helper account required"},

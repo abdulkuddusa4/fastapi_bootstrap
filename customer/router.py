@@ -5,6 +5,7 @@ from .models import Job
 
 from sqlmodel import select
 
+from typing import Annotated
 from auth.utils import authenticate, authenticate_customer
 
 from .schemas.request import CreateJobRequest
@@ -14,7 +15,7 @@ customer_router = APIRouter()
 
 
 @customer_router.get("/check")
-async def helo(db: SessionDep, claim = Depends(authenticate_customer)):
+async def helo(db: SessionDep, claim: Annotated[dict, Depends(authenticate_customer)]):
 
 	job = Job(
 		customer_id=32,
@@ -26,6 +27,7 @@ async def helo(db: SessionDep, claim = Depends(authenticate_customer)):
 	a = db.add(job)
 	await db.commit()
 	return job
+
 
 @customer_router.post("/create-job")
 async def create_job(
